@@ -2,25 +2,54 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include "perso.h" 
+#include <SDL.h>
 
 
-int main()
+int main(int argc, char** argv)
 {
-	if (SDL_Init(SDL_INIT_VIDEO)) {
-		printf("Failed to initialize SDL: %s\n", SDL_GetError());
-		return -1;
-	}
-	SDL_Window *screen = SDL_CreateWindow("Mini_RPG",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 600, SDL_WINDOW_SHOWN);
+    bool quit = false;
+    
+   /* Initialisation simple */
+    if (SDL_Init(SDL_INIT_VIDEO) != 0 )
+    {
+        fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+        return -1;
+    }
 
-	SDL_Delay(4000);
-    SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, 0);
+    {
+        /* Création de la fenêtre */
+        SDL_Window* window = NULL;
+        window = SDL_CreateWindow("minirpg",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,640,480,SDL_WINDOW_SHOWN);
+        
+        SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
+        SDL_Surface * image = SDL_LoadBMP("tux-sit.bmp");
+        SDL_Texture* monImage = SDL_CreateTextureFromSurface(renderer,image);
+        
+        while (!quit){
+    
+            SDL_RenderCopy(renderer, monImage, NULL, NULL);
+            SDL_RenderPresent(renderer);
+        }
+ 
+        SDL_DestroyTexture(monImage);
+        SDL_FreeSurface(image);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        
+        
+        if( window )
+        {
+            SDL_Delay(3000); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
 
-    SDL_SetRenderDrawColor(renderer , 0, 0, 0, 255);
-    SDL_RenderClear(renderer );
-    SDL_RenderPresent(renderer );
-
-  
+            SDL_DestroyWindow(window);
+        }
+        else
+        {
+            fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
+        }
+    }
+    
+ /* 
 //PERSONNAGE -----------------------------------------------------------------------------------------------------------------------
     
     //attribus de l'image des Sprites
@@ -53,14 +82,17 @@ int main()
         offset.x = x;
         offset.y = y;
     
-        //On blitte la surface
+ 
+ //On blitte la surface
         SDL_BlitSurface( source, clip, destination, &offset );
     }
 
     //On applique les sprites sur l'écran
     apply_surface(0,0, perso, screen2, &clip[0]);
-      
+*/      
+    SDL_Quit();
+
+    return 0;
     
-    
-	SDL_Quit();
+   
 }
