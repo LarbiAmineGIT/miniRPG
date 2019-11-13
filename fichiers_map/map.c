@@ -17,8 +17,8 @@ int main()
 	{
 		for(j=0 ; j<256 ; j++) {
 			Pixel p;
-			p.r = i;
-			p.g = j;
+			p.r = 0;
+			p.g = 255;
 			p.b = 0;
 			SetPixel(I,i,j,p);
 		}
