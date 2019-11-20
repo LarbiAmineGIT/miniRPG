@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL.h>
-
+//http://www.programmersranch.com/2014/03/sdl2-animations-with-sprite-sheets.html
 const int SHEET_WIDTH = 1536;
 const int SHEET_HEIGHT = 2112;
 
@@ -26,20 +26,33 @@ int main(int argc, char** argv)
     SDL_Surface * image = SDL_LoadBMP("nEFACHdg.bmp");
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
     
-    //destination region
-    SDL_Rect dstrect = { 10, 10, 64, 48 };
-    SDL_Rect srcrect = { 0, 0, SHEET_WIDTH/24, SHEET_HEIGHT/30.17 };
+
+
+    
+    
     while (!quit)
-    {
-        SDL_WaitEvent(&event);
- 
-        switch (event.type)
-        {
-        case SDL_QUIT:
-            quit = true;
-            break;
-        }
+    {   
+        //gives us the number of milliseconds that passed since the program started so you can know which sprite to use. Divide by 1000 to get the time in seconds 
+        Uint32 ticks = SDL_GetTicks();
+        Uint32 seconds = ticks / 100;
+        // We divide by 7 because we have 7 sprites fr our first animation
+        Uint32 sprite = seconds % 9;
         
+        //source region
+        SDL_Rect srcrect = { sprite * SHEET_WIDTH/24,71*10 ,SHEET_WIDTH/24,71 };
+        //destination region
+        SDL_Rect dstrect = { 100, 100, SHEET_WIDTH/24, 71};
+        
+        while(SDL_PollEvent(&event) != NULL)
+        {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+            }
+        }
+        SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
         SDL_RenderPresent(renderer);
     }
