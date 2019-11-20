@@ -23,7 +23,9 @@ int main(int argc, char** argv)
     /* Création de la fenêtre */
     SDL_Window * window = SDL_CreateWindow("miniRPG",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
     SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
+    SDL_Surface * fond = SDL_LoadBMP("../fond.bmp");
     SDL_Surface * image = SDL_LoadBMP("nEFACHdg.bmp");
+    SDL_Texture * background = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
     
 
@@ -53,6 +55,8 @@ int main(int argc, char** argv)
             }
         }
         SDL_RenderClear(renderer);
+        
+        SDL_RenderCopy(renderer, background, NULL, NULL);
         SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
         SDL_RenderPresent(renderer);
     }

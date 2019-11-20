@@ -58,7 +58,7 @@ bool load_texture(const std::string filename, const uint32_t format, int &tw, in
 int main() {
 	std::vector<uint32_t> tex_pixels;
 	int tex_width, tex_height;
-	const std::string tex_file("../grass.bmp");
+	const std::string tex_file("../herbes.bmp");
 	if (!load_texture(tex_file, SDL_PIXELFORMAT_ABGR8888, tex_width, tex_height, tex_pixels)) {
 		return -1;
 	}
@@ -93,12 +93,19 @@ int main() {
 		}
 	}
 
-	int tex_pos_x = 234;
-	int tex_pos_y = 65;
-	for (int j=0; j<tex_height; j++) {
-		for (int i=0; i<tex_width; i++) {
-			pixels[tex_pos_x+i+(j+tex_pos_y)*width] = tex_pixels[i+j*tex_width];
+	int tex_pos_x = 0;
+	int tex_pos_y = 0;
+	while (tex_pos_x < width) {
+		while(tex_pos_y < height) {
+			for (int j=0; j<tex_height; j++) {
+				for (int i=0; i<tex_width; i++) {
+					pixels[tex_pos_x+i+(j+tex_pos_y)*width] = tex_pixels[i+j*tex_width];
+				}
+			}
+			tex_pos_y = tex_pos_y + 32;
 		}
+		tex_pos_x = tex_pos_x + 32;
+		tex_pos_y = 0;
 	}
 
 	while (1) {
