@@ -51,6 +51,7 @@ int main(int argc, char** argv)
         {
             switch (event.type)
             {
+                SDL_PollEvent(&event);
                 
                 case SDL_QUIT:
                     quit = true;
@@ -58,10 +59,10 @@ int main(int argc, char** argv)
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym)
                     {
-                        case SDLK_LEFT:  left_move(perso, 71*10); break;
+                        case SDLK_LEFT:  left_move(perso, 72.75*8); break;
                         case SDLK_RIGHT: right_move(perso, 71*10); break;
-                        case SDLK_UP:    down_move(perso, 71*10); break;
-                        case SDLK_DOWN:  up_move(perso, 71*10); break;
+                        case SDLK_UP:    down_move(perso, 74*7); break;
+                        case SDLK_DOWN:  up_move(perso, 71*9); break;
                     }
                     break;
             }
