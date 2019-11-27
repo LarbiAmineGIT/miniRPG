@@ -59,10 +59,26 @@ int main(int argc, char** argv)
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym)
                     {
-                        case SDLK_LEFT:  left_move(perso, 72.75*8); break;
-                        case SDLK_RIGHT: right_move(perso, 71*10); break;
-                        case SDLK_UP:    down_move(perso, 74*7); break;
-                        case SDLK_DOWN:  up_move(perso, 71*9); break;
+                        case SDLK_LEFT:
+				if(perso->x > 3) {
+					left_move(perso, 72.75*8);
+				}
+				break;
+                        case SDLK_RIGHT:
+				if(perso->x < 1024 - SHEET_WIDTH/24) {
+					right_move(perso, 71*10);
+				}
+				break;
+                        case SDLK_UP:
+				if(perso->y > 3) {
+					down_move(perso, 74*7);
+				}
+				break;
+                        case SDLK_DOWN:
+				if(perso->y < 512 - 71) {
+					up_move(perso, 71*9);
+				}
+				break;
                     }
                     break;
             }
