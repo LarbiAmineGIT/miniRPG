@@ -29,7 +29,8 @@ int main(int argc, char** argv)
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
     
 
-
+    int x = 0; 
+    int y = 0;
     
     
     while (!quit)
@@ -43,14 +44,24 @@ int main(int argc, char** argv)
         //source region
         SDL_Rect srcrect = { sprite * SHEET_WIDTH/24,71*10 ,SHEET_WIDTH/24,71 };
         //destination region
-        SDL_Rect dstrect = { 100, 100, SHEET_WIDTH/24, 71};
+        SDL_Rect dstrect = { x + 100, y + 100, SHEET_WIDTH/24, 71};
         
         while(SDL_PollEvent(&event) != NULL)
         {
             switch (event.type)
             {
+                
                 case SDL_QUIT:
                     quit = true;
+                    break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym)
+                    {
+                        case SDLK_LEFT:  x--; break;
+                        case SDLK_RIGHT: x++; break;
+                        case SDLK_UP:    y--; break;
+                        case SDLK_DOWN:  y++; break;
+                    }
                     break;
             }
         }
