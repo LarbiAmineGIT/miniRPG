@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL.h>
 #include "perso.h"
+#include "monstre.h"
 //http://www.programmersranch.com/2014/03/sdl2-animations-with-sprite-sheets.html
 const int SHEET_WIDTH = 1536;
 const int SHEET_HEIGHT = 2112;
@@ -23,17 +24,21 @@ int main(int argc, char** argv)
     SDL_Init(SDL_INIT_VIDEO);
     /* Création de la fenêtre */
     SDL_Window * window = SDL_CreateWindow("miniRPG",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 512, 0);
+    
+    //Load BMP image
     SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_Surface * fond = SDL_LoadBMP("../fond.bmp");
     SDL_Surface * image = SDL_LoadBMP("nEFACHdg.bmp");
-    SDL_Surface * monstre = SDL_LoadBMP("ZlTqEth+.bmp");
+    SDL_Surface * monster = SDL_LoadBMP("ZlTqEth+.bmp");
+    
+    //Create texture
     SDL_Texture * background = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_Texture * creature = SDL_CreateTextureFromSurface(renderer, monster);
     
-	personnage* perso = init_personnage( (SDL_GetTicks()/100)%9, 71*10, SHEET_WIDTH/24, 71);
-    int x = 0; 
-    int y = 0;
-    
+    personnage* perso = init_personnage( (SDL_GetTicks()/100)%9, 71*10, SHEET_WIDTH/24, 71);
+
+    monstre* array[10];
     
     while (!quit)
     {   
@@ -42,11 +47,6 @@ int main(int argc, char** argv)
         Uint32 seconds = ticks / 100;
         // We divide by 7 because we have 7 sprites fr our first animation
         Uint32 sprite = seconds % 9;
-        
-        //source region
-        //SDL_Rect srcrect = { sprite * SHEET_WIDTH/24,71*10 ,SHEET_WIDTH/24,71 };
-        //destination region
-        //SDL_Rect dstrect = { x + 100, y + 100, SHEET_WIDTH/24, 71};
         
         while(SDL_PollEvent(&event) != NULL)
         {
@@ -92,19 +92,14 @@ int main(int argc, char** argv)
         SDL_RenderPresent(renderer);
     }
     
-    /* Attendre trois secondes, que l'utilisateur voie la fenêtre + Cas de l'erreur de la création de la fenêtre */
-    /*if( window )
-        {
-            SDL_Delay(3000);  
-            SDL_DestroyWindow(window);
-        }
-        else
-        {
-            fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
-        }*/
-    
     SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(background);
+    SDL_DestroyTexture(creature);
+
     SDL_FreeSurface(image);
+    SDL_FreeSurface(fond);
+    SDL_FreeSurface(monster);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
  
