@@ -4,7 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL.h>
 #include "perso.h"
-#include "monstre.h"
+//#include "monstre.h"
+
 //http://www.programmersranch.com/2014/03/sdl2-animations-with-sprite-sheets.html
 const int SHEET_WIDTH = 1536;
 const int SHEET_HEIGHT = 2112;
@@ -28,17 +29,17 @@ int main(int argc, char** argv)
     //Load BMP image
     SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_Surface * fond = SDL_LoadBMP("../fond.bmp");
-    SDL_Surface * image = SDL_LoadBMP("nEFACHdg.bmp");
-    SDL_Surface * monster = SDL_LoadBMP("ZlTqEth+.bmp");
+    SDL_Surface * image = SDL_LoadBMP("../nEFACHdg.bmp");
+    //SDL_Surface * monster = SDL_LoadBMP("ZlTqEth+.bmp");
     
     //Create texture
     SDL_Texture * background = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
-    SDL_Texture * creature = SDL_CreateTextureFromSurface(renderer, monster);
+    //SDL_Texture * creature = SDL_CreateTextureFromSurface(renderer, monster);
     
     personnage* perso = init_personnage( (SDL_GetTicks()/100)%9, 71*10, SHEET_WIDTH/24, 71);
 
-    monstre* array[10];
+    //monstre* array[10];
     
     while (!quit)
     {   
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
                     {
                         case SDLK_LEFT:
 				if(perso->x > 3) {
-					left_move(perso, 72.75*8);
+					left_move(perso, 72.75*8, sprite);
 				}
 				break;
                         case SDLK_RIGHT:
@@ -83,7 +84,7 @@ int main(int argc, char** argv)
                     }
                     break;
             }
-	    SDL_Delay(10);
+	    SDL_Delay(1);
         }
         SDL_RenderClear(renderer);
         
@@ -94,11 +95,11 @@ int main(int argc, char** argv)
     
     SDL_DestroyTexture(texture);
     SDL_DestroyTexture(background);
-    SDL_DestroyTexture(creature);
+    //SDL_DestroyTexture(creature);
 
     SDL_FreeSurface(image);
     SDL_FreeSurface(fond);
-    SDL_FreeSurface(monster);
+   // SDL_FreeSurface(monster);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
