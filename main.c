@@ -36,11 +36,16 @@ int main(int argc, char** argv)
     SDL_Texture * background = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
     //SDL_Texture * creature = SDL_CreateTextureFromSurface(renderer, monster);
-    
+    SDL_Texture * creature = SDL_CreateTextureFromSurface(renderer, monster);
+   
+   //Initialisation of character and monsters' array
     personnage* perso = init_personnage( (SDL_GetTicks()/100)%9, 71*10, SHEET_WIDTH/24, 71);
-
-    //monstre* array[10];
+    monstre** monster_array = init_tab_monstre();
+    int nb_monstre = 0;
     
+    //monstre* array[10];
+
+    //Game's loop
     while (!quit)
     {   
         //gives us the number of milliseconds that passed since the program started so you can know which sprite to use. Divide by 1000 to get the time in seconds 
@@ -84,13 +89,20 @@ int main(int argc, char** argv)
                     }
                     break;
             }
-	    SDL_Delay(1);
+	    if(my_rand() < 512 && nb_monstre < 10) {
+		    monster_array[nb_monstre] = init_monstre(sprite, 71*10, SHEET_WIDTH/24, 71);
+		    nb_monstre++;
+	    }
+	    SDL_RenderClear(renderer);
+	    SDL_RenderCopy(renderer, background, NULL, NULL);
+	    SDL_RenderCopy(renderer, texture, &perso->srcrect, &perso->dstrect);
+	    for(int i=0 ; i<nb_monstre ; i++) {
+		    SDL_RenderCopy(renderer, creature, &monster_array[i]->srcrect, &monster_array[i]->dstrect);
+	    }
+	    SDL_RenderPresent(renderer);
+
+	    SDL_Delay(10);
         }
-        SDL_RenderClear(renderer);
-        
-        SDL_RenderCopy(renderer, background, NULL, NULL);
-        SDL_RenderCopy(renderer, texture, &perso->srcrect, &perso->dstrect);
-        SDL_RenderPresent(renderer);
     }
     
     SDL_DestroyTexture(texture);
