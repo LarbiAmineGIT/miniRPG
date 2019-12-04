@@ -30,20 +30,18 @@ int main(int argc, char** argv)
     SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_Surface * fond = SDL_LoadBMP("../fond.bmp");
     SDL_Surface * image = SDL_LoadBMP("../nEFACHdg.bmp");
-    //SDL_Surface * monster = SDL_LoadBMP("ZlTqEth+.bmp");
+    SDL_Surface * monster = SDL_LoadBMP("ZlTqEth+.bmp");
     
     //Create texture
     SDL_Texture * background = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
-    //SDL_Texture * creature = SDL_CreateTextureFromSurface(renderer, monster);
     SDL_Texture * creature = SDL_CreateTextureFromSurface(renderer, monster);
    
    //Initialisation of character and monsters' array
     personnage* perso = init_personnage( (SDL_GetTicks()/100)%9, 71*10, SHEET_WIDTH/24, 71);
     monstre** monster_array = init_tab_monstre();
     int nb_monstre = 0;
-    
-    //monstre* array[10];
+
 
     //Game's loop
     while (!quit)
@@ -100,7 +98,6 @@ int main(int argc, char** argv)
 		    SDL_RenderCopy(renderer, creature, &monster_array[i]->srcrect, &monster_array[i]->dstrect);
 	    }
 	    SDL_RenderPresent(renderer);
-
 	    SDL_Delay(10);
         }
     }
