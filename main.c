@@ -23,24 +23,36 @@ int main(int argc, char** argv)
     }
  
     SDL_Init(SDL_INIT_VIDEO);
+
+
     /* Création de la fenêtre */
     SDL_Window * window = SDL_CreateWindow("miniRPG",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 512, 0);
+
     
     //Load BMP image
-    SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
-    SDL_Surface * grass_background = SDL_LoadBMP("../grass.bmp");
-    SDL_Surface * character_sprite = SDL_LoadBMP("../character.bmp");
-    SDL_Surface * skeleton_sprite = SDL_LoadBMP("../skeleton.bmp");
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+    SDL_Surface* grass_background = SDL_LoadBMP("../grass.bmp");
+    SDL_Surface* character_sprite = SDL_LoadBMP("../character.bmp");
+    SDL_Surface* skeleton_sprite = SDL_LoadBMP("../skeleton.bmp");
+    SDL_Surface* orc_sprite = SDL_LoadBMP("../Orc.bmp");
+
     
     //Create texture
-    SDL_Texture * grass = SDL_CreateTextureFromSurface(renderer, grass_background);
-    SDL_Texture * character = SDL_CreateTextureFromSurface(renderer, character_sprite);
-    SDL_Texture * skeleton = SDL_CreateTextureFromSurface(renderer, skeleton_sprite);
+    SDL_Texture* grass = SDL_CreateTextureFromSurface(renderer, grass_background);
+    SDL_Texture* character = SDL_CreateTextureFromSurface(renderer, character_sprite);
+    SDL_Texture* skeleton = SDL_CreateTextureFromSurface(renderer, skeleton_sprite);
+    SDL_Texture* orc = SDL_CreateTextureFromSurface(renderer, orc_sprite);
+
    
    //Initialisation of character and monsters' array
     personnage* perso = init_personnage( (SDL_GetTicks()/100)%9, 71*10, SHEET_WIDTH/24, 71);
     monstre** monster_array = init_tab_monstre();
     int nb_monstre = 0;
+
+
+    //Initialisation of array for monsters type name
+    char* orcs = "orc";
+    char* skeletons = "skeleton";
 
 
     //Game's loop
@@ -50,6 +62,7 @@ int main(int argc, char** argv)
         while(SDL_PollEvent(&event) != NULL)
         {
 		Uint32 image = SDL_GetTicks() / 100;
+
             switch (event.type)
             {
                 SDL_PollEvent(&event);
@@ -83,21 +96,46 @@ int main(int argc, char** argv)
                     }
                     break;
             }
+
 	    if(my_rand() < 512 && nb_monstre < 10) {
-		    monster_array[nb_monstre] = init_monstre(image%9, 71*10, SHEET_WIDTH/24, 71);
-		    nb_monstre++;
+		    if(my_rand() < 256) {
+		    	monster_array[nb_monstre] = init_monstre(skeletons, image%9, 71*10, SHEET_WIDTH/24, 71);
+		    	nb_monstre++;
+		    }
+		    else {
+			    monster_array[nb_monstre] = init_monstre(orcs, image%9, 71*10, SHEET_WIDTH/24, 71);
+			    nb_monstre++;
+		    }
 	    }
+
+
+	    //Update of graphics
 	    SDL_RenderClear(renderer);
-	    SDL_RenderCopy(renderer, background, NULL, NULL);
+	    SDL_RenderCopy(renderer, grass, NULL, NULL);
 	    SDL_RenderCopy(renderer, character, &perso->srcrect, &perso->dstrect);
 	    for(int i=0 ; i<nb_monstre ; i++) {
-		    SDL_RenderCopy(renderer, skeleton, &monster_array[i]->srcrect, &monster_array[i]->dstrect);
+		    if(strcmp(monster_array[i]->name, skeletons) == 0) {
+		    	SDL_RenderCopy(renderer, skeleton, &monster_array[i]->srcrect, &monster_array[i]->dstrect);
+		    }
+		    else {
+			    SDL_RenderCopy(renderer, orc, &monster_array[i]->srcrect, &monster_array[i]->dstrect);
+		    }
 	    }
 	    SDL_RenderPresent(renderer);
+
 	    SDL_Delay(10);
         }
     }
-    
+   
+
+   //Free monsters' array 
+    for(int i = 0 ; i<nb_monstre ; i++) {
+	    free(monster_array[i]);
+    }
+    free(monster_array);
+
+
+    //Free all memory used by SDL
     SDL_DestroyTexture(character);
     SDL_DestroyTexture(grass);
     SDL_DestroyTexture(skeleton);

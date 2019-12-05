@@ -2,7 +2,7 @@
 
 int my_rand() {
 	srand(time(NULL));
-	return rand() % 1024;
+	return rand() % 512;
 }
 
 monstre** init_tab_monstre() {
@@ -10,11 +10,12 @@ monstre** init_tab_monstre() {
 	return tab;
 }
 
-monstre* init_monstre(int time, int place, int width, int height) {
+monstre* init_monstre(char* nom, int time, int place, int width, int height) {
 	monstre* mob = malloc(sizeof(monstre));
 
-	mob->x = my_rand();
-	mob->y = my_rand()/2;
+	mob->x = my_rand()*2;
+	mob->y = my_rand();
+	mob->name = nom;
 
 	mob->srcrect.x = time;
 	mob->srcrect.y = place;

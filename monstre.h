@@ -8,6 +8,7 @@
 struct Monster {
 	double x;
 	double y;
+	char* name;
 
 	SDL_Rect srcrect;
 	SDL_Rect dstrect;
@@ -18,6 +19,6 @@ int my_rand();
 
 monstre** init_tab_monstre();
 
-monstre* init_monstre(int time, int place, int width, int height);
+monstre* init_monstre(char* nom, int time, int place, int width, int height);
 
 #endif
