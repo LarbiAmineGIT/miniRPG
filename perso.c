@@ -23,12 +23,14 @@ void right_move(personnage* perso, int placex, int placey) {
 	perso->x = perso->x + 8;
 	perso->dstrect.x = perso->x;
 	perso->srcrect.y = placex;
+	perso->srcrect.x = placey;
 }
 
-void left_move(personnage* perso, int placex, int placey) {
+void left_move(personnage* perso, int placex, Uint32 placey) {
 	perso->x = perso->x - 8;
 	perso->dstrect.x = perso->x;
 	perso->srcrect.y = placex;
+	perso->srcrect.x = placey;
 }
 
 void up_move(personnage* perso, int placex, int placey) {
