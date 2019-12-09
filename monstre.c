@@ -2,7 +2,7 @@
 
 int my_rand() {
 	srand(time(NULL));
-	return rand() % 512;
+	return rand() % 1024;
 }
 
 monstre** init_tab_monstre() {

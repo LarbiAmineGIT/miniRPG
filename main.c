@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include <SDL.h>
+//#include <SDL/SDL_types.h>
 #include "perso.h"
 #include "monstre.h"
 
@@ -55,6 +55,11 @@ int main(int argc, char** argv)
     char* skeletons = "skeleton";
 
 
+    SDL_Rect* collisions = {NULL, NULL, NULL, NULL};
+
+    int i; //parcours des monstres
+
+
     //Game's loop
     while (!quit)
     {   
@@ -97,6 +102,19 @@ int main(int argc, char** argv)
                     break;
             }
 
+	    while(i < nb_monstre) {
+		    if(SDL_HasIntersection(&perso->dstrect, &monster_array[i]->dstrect)) {
+			    for(int j = i ; j<nb_monstre - 1 ; j++) {
+				    monster_array[j] = monster_array[j+1];
+			    }
+			    nb_monstre = nb_monstre -1;
+		    }
+		    else {
+			    i++;
+		    }
+	    }
+	    i=0;
+
 	    if(my_rand() < 512 && nb_monstre < 10) {
 		    if(my_rand() < 256) {
 		    	monster_array[nb_monstre] = init_monstre(skeletons, image%9, 71*10, SHEET_WIDTH/24, 71);
@@ -113,12 +131,12 @@ int main(int argc, char** argv)
 	    SDL_RenderClear(renderer);
 	    SDL_RenderCopy(renderer, grass, NULL, NULL);
 	    SDL_RenderCopy(renderer, character, &perso->srcrect, &perso->dstrect);
-	    for(int i=0 ; i<nb_monstre ; i++) {
-		    if(strcmp(monster_array[i]->name, skeletons) == 0) {
-		    	SDL_RenderCopy(renderer, skeleton, &monster_array[i]->srcrect, &monster_array[i]->dstrect);
+	    for(int j=0 ; j<nb_monstre ; j++) {
+		    if(strcmp(monster_array[j]->name, skeletons) == 0) {
+		    	SDL_RenderCopy(renderer, skeleton, &monster_array[j]->srcrect, &monster_array[j]->dstrect);
 		    }
 		    else {
-			    SDL_RenderCopy(renderer, orc, &monster_array[i]->srcrect, &monster_array[i]->dstrect);
+			    SDL_RenderCopy(renderer, orc, &monster_array[j]->srcrect, &monster_array[j]->dstrect);
 		    }
 	    }
 	    SDL_RenderPresent(renderer);
