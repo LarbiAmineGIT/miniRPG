@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 
 	    while(i < nb_monstre) {
 		    if(SDL_HasIntersection(&perso->dstrect, &monster_array[i]->dstrect)) {
-			    if(perso->y > monster_array[i]->y - 8 && perso->y < monster_array[i]->y + 8) {
+			    if(perso->y > monster_array[i]->y - 8 && perso->y < monster_array[i]->y + 8 && abs(perso->x - monster_array[i]->x) < 28) {
 			    	for(int j = i ; j<nb_monstre - 1 ; j++) {
 				    	monster_array[j] = monster_array[j+1];
 			    	}
