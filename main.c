@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-//#include <SDL/SDL_types.h>
 #include "perso.h"
 #include "monstre.h"
 
@@ -54,9 +53,6 @@ int main(int argc, char** argv)
     char* orcs = "orc";
     char* skeletons = "skeleton";
 
-
-    SDL_Rect* collisions = {NULL, NULL, NULL, NULL};
-
     int i; //parcours des monstres
 
 
@@ -104,10 +100,15 @@ int main(int argc, char** argv)
 
 	    while(i < nb_monstre) {
 		    if(SDL_HasIntersection(&perso->dstrect, &monster_array[i]->dstrect)) {
-			    for(int j = i ; j<nb_monstre - 1 ; j++) {
-				    monster_array[j] = monster_array[j+1];
+			    if(perso->y > monster_array[i]->y - 8 && perso->y < monster_array[i]->y + 8) {
+			    	for(int j = i ; j<nb_monstre - 1 ; j++) {
+				    	monster_array[j] = monster_array[j+1];
+			    	}
+			    	nb_monstre = nb_monstre -1;
 			    }
-			    nb_monstre = nb_monstre -1;
+			    else {
+				    i++;
+			    }
 		    }
 		    else {
 			    i++;
