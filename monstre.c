@@ -33,5 +33,12 @@ monstre* init_monstre(char* nom, int time, int place, int width, int height) {
 	mob->dstrect.w = width;
 	mob->dstrect.h = height;
 
+	if(mob->x > 1024) {
+		mob->x = 1024 - 64;
+	}
+	if(mob->y > 512) {
+		mob->y = 512 - 71;
+	}
+
 	return mob;
 }
