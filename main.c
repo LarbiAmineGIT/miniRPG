@@ -9,6 +9,11 @@
 const int SHEET_WIDTH = 1536;
 const int SHEET_HEIGHT = 2112;
 
+int attack_rand() {
+	srand(time(NULL));
+	return rand() % 5 + 1;
+}
+
 int main(int argc, char** argv)
 { 
     bool quit = false;
@@ -54,57 +59,83 @@ int main(int argc, char** argv)
     char* skeletons = "skeleton";
 
     int i; //parcours des monstres
-
+    int combat = false;
+    int monster_combat;
 
     //Game's loop
     while (!quit)
     {   
-        
-        while(SDL_PollEvent(&event) != NULL)
+        while(SDL_PollEvent(&event))
         {
 		Uint32 image = SDL_GetTicks() / 100;
 
-            switch (event.type)
-            {
-                SDL_PollEvent(&event);
-                
-                case SDL_QUIT:
-                    quit = true;
-                    break;
-                case SDL_KEYDOWN:
-                    switch (event.key.keysym.sym)
-                    {
-                        case SDLK_LEFT:
-				if(perso->x > 3) {
-					left_move(perso, 72.75*8, SDL_GetTicks()/100%9);
-				}
-				break;
-                        case SDLK_RIGHT:
-				if(perso->x < 1024 - SHEET_WIDTH/24) {
-					right_move(perso, 71*10, image%9);
-				}
-				break;
-                        case SDLK_UP:
-				if(perso->y > 3) {
-					down_move(perso, 74*7, image%9);
-				}
-				break;
-                        case SDLK_DOWN:
-				if(perso->y < 512 - 71) {
-					up_move(perso, 71*9, image%9);
-				}
-				break;
-                    }
-                    break;
-            }
+		if(combat) {
+			switch (event.type) {
+				case SDL_QUIT:
+					quit = true;
+					break;
+				case SDL_KEYDOWN:
+					switch (event.key.keysym.sym) {
+						case SDLK_f:
+							monster_array[monster_combat]->pv = monster_array[monster_combat]->pv - attack_rand();
+							if(monster_array[monster_combat]->pv <= 0) {
+								for(int j = monster_combat ; j<nb_monstre - 1 ; j++) {
+									monster_array[j] = monster_array[j+1];
+								}
+							}
+							combat = false;
+							monster_combat = NULL;
+							break;
+						default:
+							break;
+					}
+					break;
+			}
+		}
+		else {
+            		switch (event.type)
+            		{	
+                		case SDL_QUIT:
+                    			quit = true;
+                    			break;
+                		case SDL_KEYDOWN:
+                    		switch (event.key.keysym.sym)
+                    		{
+                        		case SDLK_LEFT:
+						if(perso->x > 3) {
+						left_move(perso, 72.75*8, SDL_GetTicks()/100%9);
+						}
+						break;
+                        		case SDLK_RIGHT:
+						if(perso->x < 1024 - SHEET_WIDTH/24) {
+						right_move(perso, 71*10, image%9);
+						}
+						break;
+                        		case SDLK_UP:
+						if(perso->y > 3) {
+						down_move(perso, 74*7, image%9);
+						}
+						break;
+                        		case SDLK_DOWN:
+						if(perso->y < 512 - 71) {
+						up_move(perso, 71*9, image%9);
+						}
+						break;
+                    		}
+                    		break;
+            		}
+		}
 
 	    while(i < nb_monstre) {
+		    printf("%d\n", i);
 		    if(SDL_HasIntersection(&perso->dstrect, &monster_array[i]->dstrect)) {
 			    if(perso->y > monster_array[i]->y - 8 && perso->y < monster_array[i]->y + 8 && abs(perso->x - monster_array[i]->x) < 28) {
-			    	for(int j = i ; j<nb_monstre - 1 ; j++) {
-				    	monster_array[j] = monster_array[j+1];
-			    	}
-			    	nb_monstre = nb_monstre -1;
+			    	combat = true;
+				monster_combat = i;
+				/*for(int j = i ; j<nb_monstre-1 ; j++) {
+					monster_array[j] = monster_array[j+1];
+				}*/
+				break;
 			    }
 			    else {
 				    i++;

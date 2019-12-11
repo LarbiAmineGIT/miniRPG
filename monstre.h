@@ -9,6 +9,7 @@ struct Monster {
 	double x;
 	double y;
 	char* name;
+	int pv;
 
 	SDL_Rect srcrect;
 	SDL_Rect dstrect;
