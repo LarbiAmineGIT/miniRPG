@@ -81,10 +81,13 @@ int main(int argc, char** argv)
 							if(monster_array[monster_combat]->pv <= 0) {
 								for(int j = monster_combat ; j<nb_monstre - 1 ; j++) {
 									monster_array[j] = monster_array[j+1];
+									nb_monstre--;
 								}
+								if(monster_combat == 0) {
+									nb_monstre = 0;
+								}
+								combat = false;
 							}
-							combat = false;
-							monster_combat = NULL;
 							break;
 						default:
 							break;
@@ -126,26 +129,24 @@ int main(int argc, char** argv)
             		}
 		}
 
-	    while(i < nb_monstre) {
-		    printf("%d\n", i);
-		    if(SDL_HasIntersection(&perso->dstrect, &monster_array[i]->dstrect)) {
-			    if(perso->y > monster_array[i]->y - 8 && perso->y < monster_array[i]->y + 8 && abs(perso->x - monster_array[i]->x) < 28) {
-			    	combat = true;
-				monster_combat = i;
-				/*for(int j = i ; j<nb_monstre-1 ; j++) {
-					monster_array[j] = monster_array[j+1];
-				}*/
-				break;
-			    }
-			    else {
-				    i++;
-			    }
-		    }
-		    else {
-			    i++;
-		    }
-	    }
-	    i=0;
+		if(nb_monstre >= 1) {
+	    		while(i < nb_monstre && !combat) {
+		    		if(SDL_HasIntersection(&perso->dstrect, &monster_array[i]->dstrect)) {
+			    		if(perso->y > monster_array[i]->y - 8 && perso->y < monster_array[i]->y + 8 && abs(perso->x - monster_array[i]->x) < 28) {
+			    			combat = true;
+						monster_combat = i;
+						break;
+			    		}
+			    		else {
+				    		i++;
+			    		}
+		    		}
+		    		else {
+			    		i++;
+		    		}
+	    		}
+	    	i=0;
+		}
 
 	    if(my_rand() < 512 && nb_monstre < 10) {
 		    if(my_rand() < 256) {
