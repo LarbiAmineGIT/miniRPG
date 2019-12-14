@@ -83,8 +83,8 @@ int main(int argc, char** argv)
 								mob = monster_array[monster_combat];
 								for(int j = monster_combat ; j<nb_monstre - 1 ; j++) {
 									monster_array[j] = monster_array[j+1];
-									nb_monstre--;
 								}
+								nb_monstre--;
 								if(monster_combat == 0) {
 									nb_monstre = 0;
 								}
