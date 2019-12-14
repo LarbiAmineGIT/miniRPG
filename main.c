@@ -137,7 +137,12 @@ int main(int argc, char** argv)
 						monster_combat = i;
 						if(perso->x < monster_array[i]->x) {
 							monster_array[i]->srcrect.y = 72.75*8;
-							perso->srcrect.y = 71*23;
+							perso->srcrect.x = SHEET_WIDTH/24;
+							perso->srcrect.y = 71*28;
+						}
+						else {
+							perso->srcrect.x = SHEET_WIDTH/24;
+							perso->srcrect.y =72.75*22;
 						}
 						break;
 			    		}
