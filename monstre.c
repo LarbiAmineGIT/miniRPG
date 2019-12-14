@@ -34,10 +34,10 @@ monstre* init_monstre(char* nom, int time, int place, int width, int height) {
 	mob->dstrect.h = height;
 
 	if(mob->x > 1024) {
-		mob->x = 1024 - 64;
+		mob->x = 1024 - 90;
 	}
 	if(mob->y > 512) {
-		mob->y = 512 - 71;
+		mob->y = 512 - 90;
 	}
 
 	return mob;

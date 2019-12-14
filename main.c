@@ -135,6 +135,9 @@ int main(int argc, char** argv)
 			    		if(perso->y > monster_array[i]->y - 8 && perso->y < monster_array[i]->y + 8 && abs(perso->x - monster_array[i]->x) < 28) {
 			    			combat = true;
 						monster_combat = i;
+						if(perso->x < monster_array[i]->x) {
+							monster_array[i]->srcrect.y = 72.75*8;
+						}
 						break;
 			    		}
 			    		else {
