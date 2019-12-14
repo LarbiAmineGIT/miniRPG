@@ -61,6 +61,7 @@ int main(int argc, char** argv)
     int i; //parcours des monstres
     int combat = false;
     int monster_combat;
+    monstre* mob = NULL; //Free memory when monster disappear
 
     //Game's loop
     while (!quit)
@@ -79,6 +80,7 @@ int main(int argc, char** argv)
 						case SDLK_f:
 							monster_array[monster_combat]->pv = monster_array[monster_combat]->pv - attack_rand();
 							if(monster_array[monster_combat]->pv <= 0) {
+								mob = monster_array[monster_combat];
 								for(int j = monster_combat ; j<nb_monstre - 1 ; j++) {
 									monster_array[j] = monster_array[j+1];
 									nb_monstre--;
@@ -87,6 +89,8 @@ int main(int argc, char** argv)
 									nb_monstre = 0;
 								}
 								combat = false;
+								free(mob);
+								mob = NULL;
 							}
 							break;
 						default:

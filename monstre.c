@@ -19,7 +19,13 @@ monstre* init_monstre(char* nom, int time, int place, int width, int height) {
 	monstre* mob = malloc(sizeof(monstre));
 
 	mob->x = my_rand()*2;
+	if(mob->x > 1024) {
+		mob->x = 1024 - 70;
+	}
 	mob->y = my_rand();
+	if(mob->y > 512) {
+		mob->y = 512 - 70;
+	}
 	mob->name = nom;
 	mob->pv = pv_rand();
 
@@ -32,13 +38,6 @@ monstre* init_monstre(char* nom, int time, int place, int width, int height) {
 	mob->dstrect.y = mob->y;
 	mob->dstrect.w = width;
 	mob->dstrect.h = height;
-
-	if(mob->x > 1024) {
-		mob->x = 1024 - 90;
-	}
-	if(mob->y > 512) {
-		mob->y = 512 - 90;
-	}
 
 	return mob;
 }
